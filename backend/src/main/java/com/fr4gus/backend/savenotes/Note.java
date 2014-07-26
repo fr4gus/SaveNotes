@@ -2,9 +2,6 @@ package com.fr4gus.backend.savenotes;
 
 import java.util.Date;
 
-/**
- * Created by fr4gus on 7/24/14.
- */
 public class Note {
 
     private Long mId;

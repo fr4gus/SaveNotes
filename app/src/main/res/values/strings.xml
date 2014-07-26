@@ -7,4 +7,6 @@
     <string name="add_note_title">Add Note</string>
     <string name="add_note_description">Note content:</string>
     <string name="add_note">Add note</string>
+
+    <string name="error_send_note">Unable to send note. Try Again.</string>
 </resources>

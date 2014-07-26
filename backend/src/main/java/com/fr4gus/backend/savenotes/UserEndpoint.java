@@ -12,8 +12,10 @@ import java.util.logging.Logger;
 
 import javax.inject.Named;
 
-/** An endpoint class we are exposing */
-@Api(name = "userEndpoint", version = "v1", namespace = @ApiNamespace(ownerDomain = "savenotes.backend.fr4gus.com", ownerName = "savenotes.backend.fr4gus.com", packagePath=""))
+/**
+ * An endpoint class we are exposing
+ */
+@Api(name = "userEndpoint", version = "v1", namespace = @ApiNamespace(ownerDomain = "savenotes.backend.fr4gus.com", ownerName = "savenotes.backend.fr4gus.com", packagePath = ""))
 public class UserEndpoint {
 
     // TODO in memory implementation to test endpoints
@@ -26,6 +28,7 @@ public class UserEndpoint {
 
     /**
      * This method gets the <code>User</code> object associated with the specified <code>id</code>.
+     *
      * @param id The id of the object to be returned.
      * @return The <code>User</code> associated with <code>id</code>.
      */
@@ -40,8 +43,28 @@ public class UserEndpoint {
         return user;
     }
 
+    @ApiMethod(name = "findUser")
+    public User findUser(@Named("deviceId") String deviceId) {
+        User result = null;
+        for (User user : mLocalUsers.values()) {
+            if (user.getDeviceId().equals(deviceId)) {
+                result = user;
+                break;
+            }
+        }
+        if (result == null) {
+            synchronized (mLocalUsers) {
+                result = new User();
+                result.setDeviceId(deviceId);
+                insertUser(result);
+            }
+        }
+        return result;
+    }
+
     /**
      * This inserts a new <code>User</code> object.
+     *
      * @param user The object to be added.
      * @return The object to be added.
      */
@@ -53,16 +76,15 @@ public class UserEndpoint {
             mLastId++;
             user.setId(mLastId);
             mLocalUsers.put(mLastId, user);
-
         }
 
         return user;
     }
 
     @ApiMethod(name = "listUsers", path = "user/list")
-    public List<User> listUser(){
+    public List<User> listUser() {
         ArrayList<User> users = new ArrayList<User>();
-        users.addAll( mLocalUsers.values());
+        users.addAll(mLocalUsers.values());
         return users;
     }
 
